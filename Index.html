@@ -13,11 +13,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            transition: background 0.5s;
+        }
+        body {
+            background: linear-gradient(135deg, #181818 0%, #232323 100%);
             transition: background 0.5s;
         }
         #quote-container {
-            background: rgba(255,255,255,0.95);
+            background: rgba(34,34,34,0.97);
             padding: 40px 30px 30px 30px;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.18);
@@ -26,36 +29,40 @@
             margin: 20px;
             position: relative;
             transition: background 0.5s, color 0.5s;
+            color: #f0f0f0;
         }
         #quote {
             font-size: 1.7rem;
             font-weight: 500;
-            color: #222;
+            color: #f0f0f0;
             line-height: 1.5;
             margin-bottom: 18px;
         }
         #author {
             font-size: 1.1rem;
-            color: #666;
+            color: #bbb;
             font-style: italic;
         }
         .btn {
             margin: 10px 8px 0 8px;
-            padding: 10px 22px;
+            padding: 10px 0;
+            width: 48px;
+            height: 48px;
             border: none;
-            border-radius: 6px;
-            background: #222;
-            color: #fff;
-            font-size: 1rem;
+            border-radius: 50%;
+            background: #fff;
+            color: #232323;
+            font-size: 1.7rem;
             cursor: pointer;
             transition: background 0.3s, color 0.3s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
         .btn:hover {
-            background: #444;
-        }
-        .theme-dark body, .theme-dark {
-            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+            background: #bbb;
+            color: #232323;
         }
         .theme-dark #quote-container {
             background: rgba(34,34,34,0.97);
@@ -75,14 +82,35 @@
             background: #bbb;
             color: #232323;
         }
+        body:not(.theme-dark) {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+        }
+        body:not(.theme-dark) #quote-container {
+            background: rgba(255,255,255,0.95);
+            color: #222;
+        }
+        body:not(.theme-dark) #quote {
+            color: #222;
+        }
+        body:not(.theme-dark) #author {
+            color: #666;
+        }
+        body:not(.theme-dark) .btn {
+            background: #222;
+            color: #fff;
+        }
+        body:not(.theme-dark) .btn:hover {
+            background: #444;
+            color: #fff;
+        }
     </style>
 </head>
-<body>
+<body class="theme-dark">
     <div id="quote-container">
         <div id="quote">Loading...</div>
         <div id="author"></div>
-        <button class="btn" id="refresh-btn">Refresh</button>
-        <button class="btn" id="theme-btn">Toggle Theme</button>
+        <button class="btn" id="refresh-btn" title="Refresh">&#x1F504;</button>
+        <button class="btn" id="theme-btn" title="Toggle Theme">&#x1F319;</button>
     </div>
     <script>
         // More and more quotes!
