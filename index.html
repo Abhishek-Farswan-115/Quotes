@@ -13,14 +13,11 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            transition: background 0.5s;
-        }
-        body {
-            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+            background: #000; /* Permanently black background */
             transition: background 0.5s;
         }
         #quote-container {
-            background: rgba(34,34,34,0.97);
+            background: rgba(34,34,34,0.97); /* Dark container */
             padding: 40px 30px 30px 30px;
             border-radius: 18px;
             box-shadow: 0 8px 32px rgba(0,0,0,0.18);
@@ -45,72 +42,27 @@
         }
         .btn {
             margin: 10px 8px 0 8px;
-            padding: 10px 0;
-            width: 48px;
-            height: 48px;
+            padding: 10px 22px;
             border: none;
-            border-radius: 50%;
+            border-radius: 6px;
             background: #fff;
             color: #232323;
-            font-size: 1.7rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: background 0.3s, color 0.3s;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
         }
         .btn:hover {
             background: #bbb;
             color: #232323;
         }
-        .theme-dark #quote-container {
-            background: rgba(34,34,34,0.97);
-            color: #f0f0f0;
-        }
-        .theme-dark #quote {
-            color: #f0f0f0;
-        }
-        .theme-dark #author {
-            color: #bbb;
-        }
-        .theme-dark .btn {
-            background: #fff;
-            color: #232323;
-        }
-        .theme-dark .btn:hover {
-            background: #bbb;
-            color: #232323;
-        }
-        body:not(.theme-dark) {
-            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
-        }
-        body:not(.theme-dark) #quote-container {
-            background: rgba(255,255,255,0.95);
-            color: #222;
-        }
-        body:not(.theme-dark) #quote {
-            color: #222;
-        }
-        body:not(.theme-dark) #author {
-            color: #666;
-        }
-        body:not(.theme-dark) .btn {
-            background: #222;
-            color: #fff;
-        }
-        body:not(.theme-dark) .btn:hover {
-            background: #444;
-            color: #fff;
-        }
     </style>
 </head>
-<body class="theme-dark">
+<body>
     <div id="quote-container">
         <div id="quote">Loading...</div>
         <div id="author"></div>
-        <button class="btn" id="refresh-btn" title="Refresh">&#x1F504;</button>
-        <button class="btn" id="theme-btn" title="Toggle Theme">&#x1F319;</button>
+        <button class="btn" id="refresh-btn" title="Refresh">🔄</button>
     </div>
     <script>
         // More and more quotes!
@@ -185,6 +137,7 @@
             {quote: "The market is not a place to get rich overnight, but a place to steadily grow your wealth.", author: "Jim Cramer"},
             {quote: "The market is a place to control your emotions, to preserve your wealth, and to manage risk.", author: "Ralph Vince"},
             {quote: "Good trading is about controlling your emotions and executing a strategy, not being right.", author: "Van K. Tharp"}
+
         ];
 
         function getRandomQuote() {
@@ -197,17 +150,11 @@
             document.getElementById('author').innerHTML = `- ${author}`;
         }
 
-        // Theme toggle
-        function toggleTheme() {
-            document.body.classList.toggle('theme-dark');
-        }
-
         // Initial display
         displayQuote();
 
         // Event listeners
         document.getElementById('refresh-btn').onclick = displayQuote;
-        document.getElementById('theme-btn').onclick = toggleTheme;
     </script>
 </body>
 </html>
