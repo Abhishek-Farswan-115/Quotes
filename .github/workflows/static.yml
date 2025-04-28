@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote Generator</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%);
+            transition: background 0.5s;
+        }
+        #quote-container {
+            background: rgba(255,255,255,0.95);
+            padding: 40px 30px 30px 30px;
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+            text-align: center;
+            max-width: 600px;
+            margin: 20px;
+            position: relative;
+            transition: background 0.5s, color 0.5s;
+        }
+        #quote {
+            font-size: 1.7rem;
+            font-weight: 500;
+            color: #222;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+        #author {
+            font-size: 1.1rem;
+            color: #666;
+            font-style: italic;
+        }
+        .btn {
+            margin: 10px 8px 0 8px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 6px;
+            background: #222;
+            color: #fff;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .btn:hover {
+            background: #444;
+        }
+        .theme-dark body, .theme-dark {
+            background: linear-gradient(135deg, #181818 0%, #232323 100%);
+        }
+        .theme-dark #quote-container {
+            background: rgba(34,34,34,0.97);
+            color: #f0f0f0;
+        }
+        .theme-dark #quote {
+            color: #f0f0f0;
+        }
+        .theme-dark #author {
+            color: #bbb;
+        }
+        .theme-dark .btn {
+            background: #fff;
+            color: #232323;
+        }
+        .theme-dark .btn:hover {
+            background: #bbb;
+            color: #232323;
+        }
+    </style>
+</head>
+<body>
+    <div id="quote-container">
+        <div id="quote">Loading...</div>
+        <div id="author"></div>
+        <button class="btn" id="refresh-btn">Refresh</button>
+        <button class="btn" id="theme-btn">Toggle Theme</button>
+    </div>
+    <script>
+        // More and more quotes!
+        const quotes = [
+            {quote: "The only way to do great work is to love what you do.", author: "Steve Jobs"},
+            {quote: "Success is not final, failure is not fatal: It is the courage to continue that counts.", author: "Winston Churchill"},
+            {quote: "The journey of a thousand miles begins with one step.", author: "Lao Tzu"},
+            {quote: "Life is what happens when you’re busy making other plans.", author: "John Lennon"},
+            {quote: "Get busy living or get busy dying.", author: "Stephen King"},
+            {quote: "In the end, we only regret the chances we didn’t take.", author: "Lewis Carroll"},
+            {quote: "The purpose of life is not to be happy. It is to be useful, to be honorable, to be compassionate, to have it make some difference that you have lived and lived well.", author: "Ralph Waldo Emerson"},
+            {quote: "You miss 100% of the shots you don't take.", author: "Wayne Gretzky"},
+            {quote: "Whether you think you can or you think you can’t, you’re right.", author: "Henry Ford"},
+            {quote: "I have not failed. I've just found 10,000 ways that won't work.", author: "Thomas Edison"},
+            {quote: "If you want to lift yourself up, lift up someone else.", author: "Booker T. Washington"},
+            {quote: "Happiness is not something ready made. It comes from your own actions.", author: "Dalai Lama"},
+            {quote: "Do not wait to strike till the iron is hot; but make it hot by striking.", author: "William Butler Yeats"},
+            {quote: "The best way to predict the future is to invent it.", author: "Alan Kay"},
+            {quote: "If opportunity doesn’t knock, build a door.", author: "Milton Berle"},
+            {quote: "Dream big and dare to fail.", author: "Norman Vaughan"},
+            {quote: "What you get by achieving your goals is not as important as what you become by achieving your goals.", author: "Zig Ziglar"},
+            {quote: "The mind is everything. What you think you become.", author: "Buddha"},
+            {quote: "It does not matter how slowly you go as long as you do not stop.", author: "Confucius"},
+            {quote: "Everything you’ve ever wanted is on the other side of fear.", author: "George Addair"},
+            {quote: "Opportunities don't happen, you create them.", author: "Chris Grosser"},
+            {quote: "Don’t watch the clock; do what it does. Keep going.", author: "Sam Levenson"},
+            {quote: "Great minds discuss ideas; average minds discuss events; small minds discuss people.", author: "Eleanor Roosevelt"},
+            {quote: "If you can dream it, you can do it.", author: "Walt Disney"},
+            {quote: "Act as if what you do makes a difference. It does.", author: "William James"},
+            {quote: "The goal of a successful trader is to make the best trades. Money is secondary.", author: "Alexander Elder"},
+            {quote: "In trading and investing, it’s not about how much you make but rather how much you don’t lose.", author: "Bernard Baruch"},
+            {quote: "The stock market is filled with individuals who know the price of everything, but the value of nothing.", author: "Philip Fisher"},
+            {quote: "The most important thing is to be able to take losses. You don’t want to be a fool.", author: "Stanley Druckenmiller"},
+            {quote: "Trade with a plan, or don’t trade at all.", author: "Brett Steenbarger"},
+            {quote: "An investor’s chief problem—and even his worst enemy—is likely to be himself.", author: "Benjamin Graham"},
+            {quote: "It is not whether you’re right or wrong that’s important, but how much money you make when you’re right and how much you lose when you’re wrong.", author: "George Soros"},
+            {quote: "The market is a device for transferring money from the impatient to the patient.", author: "Warren Buffett"},
+            {quote: "The secret to trading is not predicting the future, but managing risk.", author: "Mike Bellafiore"},
+            {quote: "The key to trading success is emotional discipline. If intelligence were the key, there would be a lot more people making money in the markets.", author: "Victor Sperandeo"},
+            {quote: "Losses are the price you pay to learn the skill of trading.", author: "Jesse Livermore"},
+            {quote: "The market is the most efficient mechanism for transferring wealth from the impatient to the patient.", author: "Sir John Templeton"},
+            {quote: "The stock market is a device for transferring money from the active to the patient.", author: "Warren Buffett"},
+            {quote: "The way to wealth is to buy when blood is running in the streets.", author: "Nathan Rothschild"},
+            {quote: "Risk comes from not knowing what you’re doing.", author: "Warren Buffett"},
+            {quote: "Don’t be afraid to give up the good to go for the great.", author: "John D. Rockefeller"},
+            {quote: "The market is a voting machine in the short term and a weighing machine in the long term.", author: "Benjamin Graham"},
+            {quote: "You don’t have to be smarter than the next guy; you just need to be better at managing risk.", author: "Paul Tudor Jones"},
+            {quote: "The best traders have no ego.", author: "William Eckhardt"},
+            {quote: "The stock market is filled with individuals who know the price of everything, but the value of nothing.", author: "Philip Fisher"},
+            {quote: "If you have trouble imagining a 20% loss in the stock market, you shouldn’t be in stocks.", author: "John Bogle"},
+            {quote: "You are either in the trade or out of the trade, there is no in-between.", author: "Jack Schwager"},
+            {quote: "Price is what you pay, value is what you get.", author: "Warren Buffett"},
+            {quote: "The four most dangerous words in investing are: 'This time it’s different.'", author: "Sir John Templeton"},
+            {quote: "Success in investing doesn’t correlate with I.Q. once you’re above the level of 25.", author: "Warren Buffett"},
+            {quote: "The best traders are those who are able to embrace uncertainty and move forward with conviction.", author: "Mark Minervini"},
+            {quote: "The best way to predict the future is to create it.", author: "Peter Drucker"},
+            {quote: "It’s not whether you’re right or wrong that’s important, but how much money you make when you’re right and how much you lose when you’re wrong.", author: "George Soros"},
+            {quote: "Do not be afraid to take a loss. It is the nature of the game.", author: "Ed Seykota"},
+            {quote: "One of the most important skills in trading is knowing how to lose and stay in the game.", author: "Ray Dalio"},
+            {quote: "In trading and investing, it's not about how much you make, but how much you don't lose.", author: "Bernard Baruch"},
+            {quote: "You don’t need to be smarter than the next guy; you just need to be better at managing risk.", author: "Michael Steinhardt"},
+            {quote: "The successful trader does not trade in a vacuum but uses his knowledge of market psychology to evaluate the forces driving the market.", author: "Bruce Kovner"},
+            {quote: "A good trader is always prepared for the worst-case scenario.", author: "Victor Sperandeo"},
+            {quote: "Traders who are unwilling to accept losses will ultimately face total destruction.", author: "Martin Schwartz"},
+            {quote: "The market does not care about your opinions, your convictions, or your beliefs.", author: "Mark Douglas"},
+            {quote: "You cannot control the markets. You can only control your reaction to the market.", author: "Michael Covel"},
+            {quote: "The stock market is a device for transferring money from the active to the patient.", author: "Warren Buffett"},
+            {quote: "The stock market is filled with individuals who know the price of everything, but the value of nothing.", author: "Philip Fisher"},
+            {quote: "There’s no point in being the best at something if it’s not a great opportunity.", author: "John Paulson"},
+            {quote: "The goal of a successful trader is to make the best trades. Money is secondary.", author: "Alexander Elder"},
+            {quote: "Don’t look for the needle in the haystack. Just buy the haystack!", author: "John Bogle"},
+            {quote: "The market is not a place to get rich overnight, but a place to steadily grow your wealth.", author: "Jim Cramer"},
+            {quote: "The market is a place to control your emotions, to preserve your wealth, and to manage risk.", author: "Ralph Vince"},
+            {quote: "Good trading is about controlling your emotions and executing a strategy, not being right.", author: "Van K. Tharp"}
+        ];
+
+        function getRandomQuote() {
+            return quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        function displayQuote() {
+            const {quote, author} = getRandomQuote();
+            document.getElementById('quote').innerHTML = `"${quote}"`;
+            document.getElementById('author').innerHTML = `- ${author}`;
+        }
+
+        // Theme toggle
+        function toggleTheme() {
+            document.body.classList.toggle('theme-dark');
+        }
+
+        // Initial display
+        displayQuote();
+
+        // Event listeners
+        document.getElementById('refresh-btn').onclick = displayQuote;
+        document.getElementById('theme-btn').onclick = toggleTheme;
+    </script>
+</body>
+</html>
